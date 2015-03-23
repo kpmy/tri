@@ -1,0 +1,8 @@
+name: tri
+version: 0.0.1
+description: trinary stuff
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+dependencies:
+  browser: any
+  unittest: any
