@@ -168,11 +168,11 @@ class Bits {
   Bits.fromInt27(int27 x) {
     _fill(x.toInt(), 27);
   }
-  
-  List<Tril> toList(){
+
+  List<Tril> toList() {
     return _trits.toList();
   }
-  
+
   @override
   String toString() {
     String ret = "";

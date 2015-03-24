@@ -30,48 +30,83 @@ class Nons {
         m[i] = r;
         i++;
       }
-    }  
+    }
     String ret = "";
-    if(i==0) ret = "0";
-    else{
+    if (i == 0) ret = "0"; else {
       do {
-            i--;
-            switch(m[i]){
-              case -4: ret = ret+"W"; break;
-              case -3: ret = ret+"X"; break;
-              case -2: ret = ret+"Y"; break;
-              case -1: ret = ret+"Z"; break;
-              case 0: ret = ret+"0"; break;
-              case 1: ret = ret+"1"; break;
-              case 2: ret = ret+"2"; break;
-              case 3: ret = ret+"3"; break;
-              case 4: ret = ret+"4"; break;
-            }
-          } while (i != 0);
+        i--;
+        switch (m[i]) {
+          case -4:
+            ret = ret + "W";
+            break;
+          case -3:
+            ret = ret + "X";
+            break;
+          case -2:
+            ret = ret + "Y";
+            break;
+          case -1:
+            ret = ret + "Z";
+            break;
+          case 0:
+            ret = ret + "0";
+            break;
+          case 1:
+            ret = ret + "1";
+            break;
+          case 2:
+            ret = ret + "2";
+            break;
+          case 3:
+            ret = ret + "3";
+            break;
+          case 4:
+            ret = ret + "4";
+            break;
+        }
+      } while (i != 0);
     }
     return ret;
   }
 
   static int27 parse(String ls) {
-    if(ls.length == 0) return new int27(0);
+    if (ls.length == 0) return new int27(0);
     List<int> m = new List();
     String s = ls.toUpperCase();
-    for(int i = s.length-1; i>=0; i--){
-      switch(s[i]){
-        case "0": m.add(0); break;
-        case "1": m.add(1); break;
-        case "2": m.add(2); break;
-        case "3": m.add(3); break;
-        case "4": m.add(4); break;
-        case "W": m.add(-4); break;
-        case "X": m.add(-3); break;
-        case "Y": m.add(-2); break;
-        case "Z": m.add(-1); break;
+    for (int i = s.length - 1; i >= 0; i--) {
+      switch (s[i]) {
+        case "0":
+          m.add(0);
+          break;
+        case "1":
+          m.add(1);
+          break;
+        case "2":
+          m.add(2);
+          break;
+        case "3":
+          m.add(3);
+          break;
+        case "4":
+          m.add(4);
+          break;
+        case "W":
+          m.add(-4);
+          break;
+        case "X":
+          m.add(-3);
+          break;
+        case "Y":
+          m.add(-2);
+          break;
+        case "Z":
+          m.add(-1);
+          break;
       }
     }
     int ret = m[0];
-    for(int i = 1; i<m.length; i++){
-      ret = ret+(m[i]*pow(9, i));
+    for (int i = 1; i < m.length; i++) {
+      ret = ret + (m[i] * pow(9, i));
     }
     return new int27(ret);
   }
