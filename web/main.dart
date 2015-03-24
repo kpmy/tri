@@ -1,4 +1,4 @@
-import 'package:tri/tri/mathe.dart';
+//import 'package:tri/tri/mathe.dart';
 
 void main() {
 
