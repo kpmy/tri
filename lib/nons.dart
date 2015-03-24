@@ -90,11 +90,11 @@ class Nons {
   END Load9;
   
    */
-  static String intToString(int27 i){
-    
+  static String intToString(int27 i) {
+
   }
-  
-  static int27 parse(String s){
-    
+
+  static int27 parse(String s) {
+
   }
 }

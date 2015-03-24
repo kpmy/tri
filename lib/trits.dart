@@ -32,7 +32,7 @@ class Bits {
     }
     return ret;
   }
-  
+
   /*
    *  PROCEDURE (VAR s: Set) And* (t: Set), NEW;
     VAR i: Tryte; z: Set; a, b: TRiscTern.Trilean;
@@ -98,22 +98,22 @@ class Bits {
     s.pos:=z.pos;
   END Div;
    */
-  Bits operator +(Bits that){
-    
+  Bits operator +(Bits that) {
+
   }
-  
-  Bits operator *(Bits that){
-    
+
+  Bits operator *(Bits that) {
+
   }
-  
-  Bits operator -(Bits that){
-    
+
+  Bits operator -(Bits that) {
+
   }
-  
-  Bits operator /(Bits that){
-    
+
+  Bits operator /(Bits that) {
+
   }
-  
+
   Bits extract(int from, int to) {
     Bits ret = new Bits._new();
     if (from >= _trits.length || to > _trits.length) throw new ArgumentError("$from, $to");
@@ -122,32 +122,30 @@ class Bits {
     }
     return ret;
   }
-  
-  Bits join(Bits that){
+
+  Bits join(Bits that) {
     Bits ret = new Bits._new();
-    for(int i = 1; i<28; i++){
-      if(this[i] != NULL)
-        ret = ret.incl(i*this[i].toInt);
-      if(that[i] != NULL)
-        ret = ret.incl(i*that[i].toInt);
+    for (int i = 1; i < 28; i++) {
+      if (this[i] != NULL) ret = ret.incl(i * this[i].toInt);
+      if (that[i] != NULL) ret = ret.incl(i * that[i].toInt);
     }
     return ret;
   }
-  
-  Bits incl(int x){
+
+  Bits incl(int x) {
     if (x == 0 || x.abs() > 27) throw new ArgumentError("$x");
     Bits ret = this.extract(0, 27);
-    ret._trits[x.abs()-1] = new Tril.fromInt(x.sign);
+    ret._trits[x.abs() - 1] = new Tril.fromInt(x.sign);
     return ret;
   }
-  
-  Bits excl(int x){
+
+  Bits excl(int x) {
     if (x == 0 || x.abs() > 27) throw new ArgumentError("$x");
     Bits ret = this.extract(0, 27);
-    ret._trits[x.abs()-1] = NULL;
+    ret._trits[x.abs() - 1] = NULL;
     return ret;
   }
-  
+
   Tril operator [](int x) {
     if (x == 0 || x.abs() > 27) throw new ArgumentError("$x");
     Tril ret = _trits[x.abs() - 1];
