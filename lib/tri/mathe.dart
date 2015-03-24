@@ -7,6 +7,7 @@ part 'int.dart';
 part 'trits.dart';
 part 'nons.dart';
 part 'fib.dart';
+part 'conv.dart';
 
 /*
  * циклическое отрицание x + 1 (по модулю 3)

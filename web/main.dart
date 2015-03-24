@@ -1,5 +1,5 @@
 import 'package:unittest/unittest.dart';
-import 'package:tri/mathe.dart';
+import 'package:tri/tri/mathe.dart';
 
 void main() {
   print("$TRUE, $NULL, $FALSE");
@@ -36,8 +36,14 @@ void main() {
     expect(int27.max, equals(new Bits(int27.max).toInt27()));
     expect(new Bits(new tryte(1)) << 5, equals((new Bits(new tryte(1)) << 18) >> 13));
     expect(new int27(1) << 5, equals((new int27(1) << 18) >> 13));
-    expect(new tryte(1) << 5, isNot(equals((new tryte(1) << 18) >> 13)));
+    expect(new tryte(1) << 5, isNot(equals(short(new tryte(1) << 18) >> 13)));
     expect(new Bits(new tryte(5))[1], equals(~(new Bits(new tryte(-5))[1])));
     expect(new Bits(new tryte(0)).incl(5).incl(8).incl(-1).excl(-1), equals(new Bits(new tryte(0)).incl(5).join(new Bits(new tryte(0)).incl(8))));
+  });
+  
+  test("conv", (){
+    expect(Nons.intToString(new int27(2342)), equals("32Z2"));
+    expect(Nons.parse("32Z2"), equals(new int27(2342)));
+    expect(mergeTryteList(splitInt27(new int27(4323352435))), equals(new int27(4323352435)));
   });
 }

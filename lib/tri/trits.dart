@@ -33,85 +33,48 @@ class Bits {
     return ret;
   }
 
-  /*
-   *  PROCEDURE (VAR s: Set) And* (t: Set), NEW;
-    VAR i: Tryte; z: Set; a, b: TRiscTern.Trilean;
-  BEGIN
-    i:=1; z.Reset;
-    WHILE i<28 DO
-      a:=s.In(i); b:=t.In(i);
-      a:=TRiscTern.And(a, b);
-      IF TRiscTern.True(a) THEN z.Incl(i)
-      ELSIF TRiscTern.False(a) THEN z.Incl(SHORT(-i))
-      END;
-      INC(i);
-    END;
-    s.neg:=z.neg;
-    s.pos:=z.pos;
-  END And;
-  
-  PROCEDURE (VAR s: Set) Or* (t: Set), NEW;
-    VAR i: Tryte; z: Set; a, b: TRiscTern.Trilean;
-  BEGIN
-    i:=1; z.Reset;
-    WHILE i<28 DO
-      a:=s.In(i); b:=t.In(i);
-      a:=TRiscTern.Or(a, b);
-      IF TRiscTern.True(a) THEN z.Incl(i)
-      ELSIF TRiscTern.False(a) THEN z.Incl(SHORT(-i))
-      END;
-      INC(i);
-    END;
-    s.neg:=z.neg;
-    s.pos:=z.pos;
-  END Or;
-  
-  PROCEDURE (VAR s: Set) Sub* (t: Set), NEW;
-    VAR i: Tryte; z: Set; a, b: TRiscTern.Trilean;
-  BEGIN
-    i:=1; z.Reset;
-    WHILE i<28 DO
-      a:=s.In(i); b:=t.In(i);
-      a:=TRiscTern.And(a, TRiscTern.Not(b));
-      IF TRiscTern.True(a) THEN z.Incl(i)
-      ELSIF TRiscTern.False(a) THEN z.Incl(SHORT(-i))
-      END;
-      INC(i);
-    END;
-    s.neg:=z.neg;
-    s.pos:=z.pos;
-  END Sub;
-  
-  PROCEDURE (VAR s: Set) Div* (t: Set), NEW;
-    VAR i: Tryte; z: Set; a, b: TRiscTern.Trilean;
-  BEGIN
-    i:=1; z.Reset;
-    WHILE i<28 DO
-      a:=s.In(i); b:=t.In(i);
-      a:=TRiscTern.Not(TRiscTern.Eq(a, b));
-      IF TRiscTern.True(a) THEN z.Incl(i)
-      ELSIF TRiscTern.False(a) THEN z.Incl(SHORT(-i))
-      END;
-      INC(i);
-    END;
-    s.neg:=z.neg;
-    s.pos:=z.pos;
-  END Div;
-   */
   Bits operator +(Bits that) {
-
+    Bits ret = new Bits._new();
+    for (int i = 1; i < 28; i++) {
+      Tril x = this[i] | that[i];
+      if (x != NULL) {
+        ret = ret.incl(x.toInt * i);
+      }
+    }
+    return ret;
   }
 
   Bits operator *(Bits that) {
-
+    Bits ret = new Bits._new();
+    for (int i = 1; i < 28; i++) {
+      Tril x = this[i] & that[i];
+      if (x != NULL) {
+        ret = ret.incl(x.toInt * i);
+      }
+    }
+    return ret;
   }
 
   Bits operator -(Bits that) {
-
+    Bits ret = new Bits._new();
+    for (int i = 1; i < 28; i++) {
+      Tril x = this[i] & ~that[i];
+      if (x != NULL) {
+        ret = ret.incl(x.toInt * i);
+      }
+    }
+    return ret;
   }
 
   Bits operator /(Bits that) {
-
+    Bits ret = new Bits._new();
+    for (int i = 1; i < 28; i++) {
+      Tril x = ~eq(this[i], that[i]);
+      if (x != NULL) {
+        ret = ret.incl(x.toInt * i);
+      }
+    }
+    return ret;
   }
 
   Bits extract(int from, int to) {
@@ -205,7 +168,11 @@ class Bits {
   Bits.fromInt27(int27 x) {
     _fill(x.toInt(), 27);
   }
-
+  
+  List<Tril> toList(){
+    return _trits.toList();
+  }
+  
   @override
   String toString() {
     String ret = "";

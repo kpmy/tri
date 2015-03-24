@@ -100,12 +100,12 @@ class tryte extends tri_num {
     return new tryte(-this._code);
   }
 
-  tryte operator <<(int x) {
-    return short((new Bits(this) << x).toInt27());
+  int27 operator <<(int x) {
+    return (new Bits(this) << x).toInt27();
   }
 
-  tryte operator >>(int x) {
-    return short((new Bits(this) >> x).toInt27());
+  int27 operator >>(int x) {
+    return (new Bits(this) >> x).toInt27();
   }
 }
 
