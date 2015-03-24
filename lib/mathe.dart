@@ -4,7 +4,9 @@ import 'dart:math';
 
 part 'tri.dart';
 part 'int.dart';
-part 'bits.dart';
+part 'trits.dart';
+part 'nons.dart';
+part 'fib.dart';
 
 /*
  * циклическое отрицание x + 1 (по модулю 3)
@@ -79,12 +81,11 @@ Tril mod(Tril x) {
   return x | ~x;
 }
 
-tryte short(int27 i){
-  if(i.toInt()<tryte.min.toInt() || i.toInt()>tryte.max.toInt())
-      throw new ArgumentError();
-  return new tryte(i.toInt());
+tryte short(int27 i) {
+  Bits from = new Bits(i).extract(0, 9);
+  return new tryte(from.toInt27().toInt());
 }
 
-int27 long(tryte t){
+int27 long(tryte t) {
   return new int27(t.toInt());
 }

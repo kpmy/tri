@@ -12,7 +12,7 @@ final tryte_limit = pow(tryte_trit_num * 3, 3);
 const int27_trit_num = 27;
 final int27_limit = pow(pow(tryte_trit_num * 3, 3), 3);
 
-abstract class tri_num{
+abstract class tri_num {
   int toInt();
 }
 
@@ -26,18 +26,21 @@ class tryte extends tri_num {
 
   factory tryte(int x) {
     if (x > max.toInt() || x < min.toInt()) throw new ArgumentError();
-    switch(x){
-      case 0: return _zero;
-      case 1: return _one;
-      default: return new tryte._new(x);
+    switch (x) {
+      case 0:
+        return _zero;
+      case 1:
+        return _one;
+      default:
+        return new tryte._new(x);
     }
   }
 
-  factory tryte.one(){
+  factory tryte.one() {
     return _one;
   }
 
-  factory tryte.zero(){
+  factory tryte.zero() {
     return _zero;
   }
   tryte._new(this._code);
@@ -93,12 +96,20 @@ class tryte extends tri_num {
     return new tryte(this._code % that._code);
   }
 
-  tryte operator -(){
+  tryte operator -() {
     return new tryte(-this._code);
+  }
+
+  tryte operator <<(int x) {
+    return short((new Bits(this) << x).toInt27());
+  }
+
+  tryte operator >>(int x) {
+    return short((new Bits(this) >> x).toInt27());
   }
 }
 
-class int27 extends tri_num{
+class int27 extends tri_num {
   static final int27 max = new int27._new(int27_limit ~/ 2);
   static final int27 min = new int27._new(-(int27_limit ~/ 2));
   static final _one = new int27._new(1);
@@ -108,18 +119,21 @@ class int27 extends tri_num{
 
   factory int27(int x) {
     if (x > max.toInt() || x < min.toInt()) throw new ArgumentError();
-    switch(x){
-      case 0: return _zero;
-      case 1: return _one;
-      default: return new int27._new(x);
+    switch (x) {
+      case 0:
+        return _zero;
+      case 1:
+        return _one;
+      default:
+        return new int27._new(x);
     }
   }
 
-  factory int27.one(){
+  factory int27.one() {
     return _one;
   }
 
-  factory int27.zero(){
+  factory int27.zero() {
     return _zero;
   }
   int27._new(this._code);
@@ -175,7 +189,15 @@ class int27 extends tri_num{
     return new int27(this._code % that._code);
   }
 
-  int27 operator -(){
+  int27 operator -() {
     return new int27(-this._code);
+  }
+
+  int27 operator <<(int x) {
+    return (new Bits(this) << x).toInt27();
+  }
+
+  int27 operator >>(int x) {
+    return (new Bits(this) >> x).toInt27();
   }
 }
