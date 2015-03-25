@@ -8,6 +8,7 @@ import 'dart:async';
 void main() {
   //testTri();
   //testMem();
+  machine.tuneLog();
   machine.init();
 
 //create the Console.
@@ -23,7 +24,7 @@ blink = (){
     console.setChar(2, 0, '_');
   show = !show;
   console.flush();
-  new Future.delayed(new Duration(milliseconds: 500), blink);  
+  new Future.delayed(new Duration(milliseconds: 500), blink);
 };
 blink();
 

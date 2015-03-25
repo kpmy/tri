@@ -6,4 +6,5 @@ environment:
 dependencies:
   browser: any
   libpen: any
+  logging_handlers: any
   unittest: any

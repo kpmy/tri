@@ -21,9 +21,11 @@ class Mapper {
   static const int WORD = 3;
   RAM _ram;
 
+  int get length => _ram.length ~/ 3;
+
   int27 operator [](int adr) {
     int a = adr * WORD;
-    halt.on(condition: a >= 0 && a < _ram.length);
+    halt.on(condition: a >= 0 && a+3 < _ram.length, msg: adr);
     List<tryte> x = new List(3);
     for (int i = 0; i < WORD; i++) {
       x[i] = _ram[a + i];
@@ -53,13 +55,13 @@ class _stdRam extends RAM {
 
   @override
   tryte operator [](int adr) {
-    halt.on(condition: (adr >= 0 && adr < data.length), code: 20);
+    halt.on(condition: (adr >= 0 && adr < data.length), code: 20, msg: adr);
     return data[adr];
   }
 
   @override
   operator []=(int adr, tryte val) {
-    halt.on(condition: (adr >= 0 && adr < data.length), code: 20);
+    halt.on(condition: (adr >= 0 && adr < data.length), code: 20, msg: adr);
     data[adr] = val;
   }
 
