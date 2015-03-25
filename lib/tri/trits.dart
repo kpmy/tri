@@ -1,6 +1,6 @@
 part of tri;
 
-class Bits {
+class Trits {
 
   List<Tril> _trits;
 
@@ -12,29 +12,29 @@ class Bits {
   @override
   int get hashCode => _toInt();
 
-  bool operator ==(Bits that) {
+  bool operator ==(Trits that) {
     return this._toInt() == that._toInt();
   }
 
-  Bits operator <<(int x) {
-    Bits ret = new Bits._new();
+  Trits operator <<(int x) {
+    Trits ret = new Trits._new();
     for (int i = x; i < _trits.length; i++) {
       ret._trits[i] = this._trits[i - x];
     }
     return ret;
   }
 
-  Bits operator >>(int _x) {
-    Bits ret = new Bits._new();
+  Trits operator >>(int _x) {
+    Trits ret = new Trits._new();
     int x = -_x;
-    for (int i = _trits.length - 2 + x; i >= 0; i--) {
+    for (int i = _trits.length - 1 + x; i >= 0; i--) {
       ret._trits[i] = this._trits[i + x.abs()];
     }
     return ret;
   }
 
-  Bits operator +(Bits that) {
-    Bits ret = new Bits._new();
+  Trits operator +(Trits that) {
+    Trits ret = new Trits._new();
     for (int i = 1; i < 28; i++) {
       Tril x = this[i] | that[i];
       if (x != NULL) {
@@ -44,8 +44,8 @@ class Bits {
     return ret;
   }
 
-  Bits operator *(Bits that) {
-    Bits ret = new Bits._new();
+  Trits operator *(Trits that) {
+    Trits ret = new Trits._new();
     for (int i = 1; i < 28; i++) {
       Tril x = this[i] & that[i];
       if (x != NULL) {
@@ -55,8 +55,8 @@ class Bits {
     return ret;
   }
 
-  Bits operator -(Bits that) {
-    Bits ret = new Bits._new();
+  Trits operator -(Trits that) {
+    Trits ret = new Trits._new();
     for (int i = 1; i < 28; i++) {
       Tril x = this[i] & ~that[i];
       if (x != NULL) {
@@ -66,8 +66,8 @@ class Bits {
     return ret;
   }
 
-  Bits operator /(Bits that) {
-    Bits ret = new Bits._new();
+  Trits operator /(Trits that) {
+    Trits ret = new Trits._new();
     for (int i = 1; i < 28; i++) {
       Tril x = ~eq(this[i], that[i]);
       if (x != NULL) {
@@ -77,8 +77,8 @@ class Bits {
     return ret;
   }
 
-  Bits extract(int from, int to) {
-    Bits ret = new Bits._new();
+  Trits extract(int from, int to) {
+    Trits ret = new Trits._new();
     if (from >= _trits.length || to > _trits.length) throw new ArgumentError("$from, $to");
     for (int i = from; i < to; i++) {
       ret._trits[i] = this._trits[i];
@@ -86,8 +86,8 @@ class Bits {
     return ret;
   }
 
-  Bits join(Bits that) {
-    Bits ret = new Bits._new();
+  Trits join(Trits that) {
+    Trits ret = new Trits._new();
     for (int i = 1; i < 28; i++) {
       if (this[i] != NULL) ret = ret.incl(i * this[i].toInt);
       if (that[i] != NULL) ret = ret.incl(i * that[i].toInt);
@@ -95,16 +95,16 @@ class Bits {
     return ret;
   }
 
-  Bits incl(int x) {
+  Trits incl(int x) {
     if (x == 0 || x.abs() > 27) throw new ArgumentError("$x");
-    Bits ret = this.extract(0, 27);
+    Trits ret = this.extract(0, 27);
     ret._trits[x.abs() - 1] = new Tril.fromInt(x.sign);
     return ret;
   }
 
-  Bits excl(int x) {
+  Trits excl(int x) {
     if (x == 0 || x.abs() > 27) throw new ArgumentError("$x");
-    Bits ret = this.extract(0, 27);
+    Trits ret = this.extract(0, 27);
     ret._trits[x.abs() - 1] = NULL;
     return ret;
   }
@@ -161,11 +161,11 @@ class Bits {
     return new int27(_toInt());
   }
 
-  Bits.fromTryte(tryte x) {
+  Trits.fromTryte(tryte x) {
     _fill(x.toInt(), 9);
   }
 
-  Bits.fromInt27(int27 x) {
+  Trits.fromInt27(int27 x) {
     _fill(x.toInt(), 27);
   }
 
@@ -192,11 +192,11 @@ class Bits {
     return ret;
   }
 
-  factory Bits(tri_num x) {
-    if (x is tryte) return new Bits.fromTryte(x); else if (x is int27) return new Bits.fromInt27(x);
+  factory Trits(tri_num x) {
+    if (x is tryte) return new Trits.fromTryte(x); else if (x is int27) return new Trits.fromInt27(x);
   }
 
-  Bits._new() {
+  Trits._new() {
     this.clear();
   }
 

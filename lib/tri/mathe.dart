@@ -83,7 +83,7 @@ Tril mod(Tril x) {
 }
 
 tryte short(int27 i) {
-  Bits from = new Bits(i).extract(0, 9);
+  Trits from = new Trits(i).extract(0, 9);
   return new tryte(from.toInt27().toInt());
 }
 

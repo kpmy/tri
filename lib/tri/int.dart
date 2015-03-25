@@ -101,11 +101,11 @@ class tryte extends tri_num {
   }
 
   int27 operator <<(int x) {
-    return (new Bits(this) << x).toInt27();
+    return (new Trits(this) << x).toInt27();
   }
 
   int27 operator >>(int x) {
-    return (new Bits(this) >> x).toInt27();
+    return (new Trits(this) >> x).toInt27();
   }
 }
 
@@ -194,10 +194,10 @@ class int27 extends tri_num {
   }
 
   int27 operator <<(int x) {
-    return (new Bits(this) << x).toInt27();
+    return (new Trits(this) << x).toInt27();
   }
 
   int27 operator >>(int x) {
-    return (new Bits(this) >> x).toInt27();
+    return (new Trits(this) >> x).toInt27();
   }
 }
