@@ -6,6 +6,7 @@ abstract class RAM {
   int get length;
 }
 
+/* особенность MMU - симметричная адресация относительно нуля */
 abstract class MMU extends RAM {
   int get pos;
   int get neg;
@@ -14,6 +15,10 @@ abstract class MMU extends RAM {
 class MemFactory {
   static RAM newRAM(int length) {
     return new _stdRam(length);
+  }
+  
+  static MMU newMMU(int neg, int pos){
+    return new _stdMmu(neg, pos);
   }
 }
 
@@ -25,7 +30,6 @@ class Mapper {
 
   int27 operator [](int adr) {
     int a = adr * WORD;
-    halt.on(condition: a >= 0 && a+3 < _ram.length, msg: adr);
     List<tryte> x = new List(3);
     for (int i = 0; i < WORD; i++) {
       x[i] = _ram[a + i];
@@ -35,7 +39,6 @@ class Mapper {
 
   operator []=(int adr, int27 val) {
     int a = adr * WORD;
-    halt.on(condition: a >= 0 && a < _ram.length);
     List<tryte> x = splitInt27(val);
     for (int i = 0; i < WORD; i++) {
       _ram[a + i] = x[i];
@@ -44,6 +47,43 @@ class Mapper {
 
   Mapper(this._ram) {
     halt.on(condition: _ram != null);
+  }
+}
+
+class _stdMmu extends MMU{
+  
+  RAM _n;
+  RAM _p;
+  
+  int get neg => _n.length;
+  int get pos => _p.length;
+  int get length => _n.length + _p.length;
+  
+  tryte operator [](int adr){
+    if (adr >= 0){
+      halt.on(condition: adr<_p.length);
+      return _p[adr];
+    }else{
+      halt.on(condition: adr.abs()-1<_n.length);
+      return _n[adr.abs() - 1];
+    }
+  }
+
+  operator []=(int adr, tryte val){
+    if (adr >= 0){
+      halt.on(condition: adr<_p.length);
+      _p[adr] = val;
+    }else{
+      halt.on(condition: adr.abs()-1<_n.length);
+      _n[adr.abs() - 1] = val;
+    }
+  }
+
+  _stdMmu(int neg, int pos){
+    halt.on(condition: neg<0);
+    halt.on(condition: pos>0);
+    this._n = new _stdRam(neg.abs());
+    this._p = new _stdRam(pos+1);
   }
 }
 

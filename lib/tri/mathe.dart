@@ -90,3 +90,11 @@ tryte short(int27 i) {
 int27 long(tryte t) {
   return new int27(t.toInt());
 }
+
+int27 i27(int x){
+  return new int27(x);
+}
+
+tryte i9(int x){
+  return new tryte(x);
+}
