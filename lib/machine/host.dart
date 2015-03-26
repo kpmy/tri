@@ -40,7 +40,15 @@ class Host {
   bool stop = false;
   MMU mem;
   CPU proc;
-
+  
+  void run(){
+    Function step;
+    step = () {
+      if (proc.next() != CPUresult.stop && !stop) new Future.delayed(new Duration(milliseconds: 500), step);
+    };
+    step();
+  }
+  
   Host() {
     mem = new DebugMMU(MemFactory.newMMU(bootPC, memLength));
     proc = ProcFactory.newCPU(mem, pc: i27(bootPC ~/ 3));
@@ -49,10 +57,5 @@ class Host {
     new Mapper(mem)[heapOrg ~/ 3] = i27(heap);
     proc.reset();
     proc.debug = true;
-    Function step;
-    step = () {
-      if (proc.next() != CPU.stop && !stop) new Future.delayed(new Duration(milliseconds: 500), step);
-    };
-    step();
   }
 }

@@ -8,3 +8,7 @@ dependencies:
   libpen: any
   logging_handlers: any
   unittest: any
+  async_await:
+    git: https://github.com/dart-lang/async_await.git
+transformers:
+- async_await

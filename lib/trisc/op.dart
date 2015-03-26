@@ -73,6 +73,7 @@ class Op{
   
   static Operation parse(int27 ir){
     tryte format = short(ir >> 24);
-    return cache[format];
+    var op = cache[format];
+    return op(ir);
   }
 }

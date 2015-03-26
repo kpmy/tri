@@ -5,16 +5,19 @@ class internal{
   static final nop = new tryte.zero();
 }
 
+enum CPUresult{
+  ok,
+  stop,
+  skip
+}
+
 abstract class CPU{
-  static const int ok = 0;
-  static const int stop = 1;
-  static const int skip = 2;
 
   bool get debug;
   set debug(bool);
 
   void reset();
-  int next();
+  CPUresult next();
 }
 
 class ProcFactory{
@@ -26,7 +29,7 @@ class ProcFactory{
   }
 }
 
-typedef int IRhandler(Operation op);
+typedef CPUresult IRhandler(Operation op);
 
 class _cpu extends CPU{
   int27 ir;
@@ -52,13 +55,13 @@ class _cpu extends CPU{
     return def;
   }
 
-  int parse(int27 ir, IRhandler h){
+  CPUresult parse(int27 ir, IRhandler h){
     tryte format = short(ir >> 24);
     if(format == internal.nop){
-      return CPU.skip;
+      return CPUresult.skip;
     }else if(format == internal.haltMe){
       halt.on(condition: !debug, code: 146);
-      return CPU.stop;
+      return CPUresult.stop;
     }else{
       return h(Op.parse(ir));
     }
@@ -71,7 +74,7 @@ class _cpu extends CPU{
   }
 
   @override
-  int next(){
+  CPUresult next(){
     step++;
     ir = new Mapper(mem)[pc.toInt()];
     fmt.fine("step $step: [$pc]");
@@ -80,7 +83,7 @@ class _cpu extends CPU{
       pc = new int27.zero();
     fmt.fine(new Trits(ir));
 
-    int ret = parse(ir, handler());
+    CPUresult ret = parse(ir, handler());
     fmt.fine("step $step: $ret");
     return ret;
   }
