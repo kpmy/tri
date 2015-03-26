@@ -1,6 +1,7 @@
 library tri;
 
 import 'dart:math';
+import 'package:tri/halt.dart';
 
 part 'tri.dart';
 part 'int.dart';
@@ -82,19 +83,23 @@ Tril mod(Tril x) {
   return x | ~x;
 }
 
-tryte short(int27 i) {
-  Trits from = new Trits(i).extract(0, 9);
-  return new tryte(from.toInt27().toInt());
+tryte short(i) {
+  if(i is int27){
+    Trits from = new Trits(i).extract(0, 9);
+    return new tryte(from.toInt27().toInt());
+  }else if(i is int){
+    return new tryte(i);
+  }else{
+    halt.on();
+  }
 }
 
-int27 long(tryte t) {
-  return new int27(t.toInt());
+int27 long(t) {
+  if(t is tryte)
+    return new int27(t.toInt());
+  else if(t is int)
+    return new int27(t);
+  else
+    halt.on();
 }
 
-int27 i27(int x){
-  return new int27(x);
-}
-
-tryte i9(int x){
-  return new tryte(x);
-}

@@ -12,7 +12,7 @@ class halt implements Exception{
 
   static on({bool condition: false, int code: 100, msg}){
     if(!condition){
-      throw new halt._new(code, msg);
+      throw new halt._new(code, msg == null ? "" : msg);
     }
   }
 }

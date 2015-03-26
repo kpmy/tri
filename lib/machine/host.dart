@@ -40,7 +40,7 @@ class Host {
   bool stop = false;
   MMU mem;
   CPU proc;
-  
+
   void run(){
     Function step;
     step = () {
@@ -48,13 +48,13 @@ class Host {
     };
     step();
   }
-  
+
   Host() {
     mem = new DebugMMU(MemFactory.newMMU(bootPC, memLength));
-    proc = ProcFactory.newCPU(mem, pc: i27(bootPC ~/ 3));
+    proc = ProcFactory.newCPU(mem, pc: long(bootPC ~/ 3));
     /* инициализируем константы машины */
-    new Mapper(mem)[memLim ~/ 3] = i27(mem.length);
-    new Mapper(mem)[heapOrg ~/ 3] = i27(heap);
+    new Mapper(mem)[memLim ~/ 3] = long(mem.length);
+    new Mapper(mem)[heapOrg ~/ 3] = long(heap);
     proc.reset();
     proc.debug = true;
   }

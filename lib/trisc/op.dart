@@ -6,30 +6,58 @@ abstract class Operation{
 
 abstract class MemoryOperation extends Operation{
   int27 _ir;
+
   tryte a;
   tryte b;
   int27 offset;
-  
+
   @override
   int27 get raw => _ir;
-  
+
   MemoryOperation(this._ir){
-    
+    a = short((_ir << 3) >> 23);
+    b = short((_ir << 7) >> 23);
+    offset = (_ir << -11) >> 11;
+  }
+}
+
+class Condition{
+  bool link;
+  Tril jump;
+  Tril nz;
+  Tril eq;
+
+  Condition(tryte c){
+    Trits cond = new Trits(c);
+    link = cond[asm.lnk.toInt()].True;
+    jump = cond[asm.jmp.toInt()];
+    nz = cond[asm.nz.toInt()];
+    eq = cond[asm.eq.toInt()];
   }
 }
 
 abstract class BranchOperation extends Operation{
+
   int27 _ir;
-  
+
+  tryte c;
+  int27 offset;
+  int27 data;
+  Condition cond;
+
   @override
   int27 get raw => _ir;
-  
+
   BranchOperation(this._ir){
-    
+    c = short((_ir << 23) >>23);
+    offset = (_ir << 9) >> 9;
+    data = (_ir << 9) >> 13;
+    tryte cnd = short((_ir << 3) >> 21);
+    cond = new Condition(cnd);
   }
 }
 
-class GetWord extends MemoryOperation{  
+class GetWord extends MemoryOperation{
   GetWord(int27 ir) : super(ir);
 }
 
@@ -57,7 +85,7 @@ typedef Operation OperationFactory(int27 ir);
 
 class Op{
   static Map<tryte, Operation> cache = _init();
-  
+
   static Map _init(){
     Map<tryte, OperationFactory> ret = new Map();
     ret[asm.reg3] = (ir){return new Reg3(ir);};
@@ -70,7 +98,7 @@ class Op{
     ret[asm.brc] = (ir){return new BranchConst(ir);};
     return ret;
   }
-  
+
   static Operation parse(int27 ir){
     tryte format = short(ir >> 24);
     var op = cache[format];

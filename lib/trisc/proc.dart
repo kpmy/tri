@@ -32,13 +32,18 @@ class ProcFactory{
 typedef CPUresult IRhandler(Operation op);
 
 class _cpu extends CPU{
+
+  Registers reg;
+  RAM mem;
+
   int27 ir;
   int27 pc;
+
   int step = 0;
+
   bool _debug = false;
 
   int27 start = new int27.zero();
-  RAM mem;
 
   @override
   bool get debug => _debug;
@@ -49,8 +54,28 @@ class _cpu extends CPU{
   }
 
   IRhandler handler(){
+    var rh = reg.handler();
+
+    var jump = (int27 to, bool link){
+      if(link)
+        reg[short(reg.length-1)] = to * long(3); /* регистры запоминают адрес в трайтах */
+      pc = to; /* сдвиг в словах */
+    };
+
+    var calc = (BranchOperation op, int27 adr){
+      if(op.cond.jump.True)
+        jump(adr, op.cond.link);
+    };
+
     var def = (Operation op){
-      
+      if(op is Reg)
+        return rh(op);
+      if(op is BranchReg){
+        calc(op, reg[op.c] ~/ long(3));
+        return CPUresult.ok;
+      }
+      else
+        halt.on(msg: op.runtimeType);
     };
     return def;
   }
@@ -63,13 +88,16 @@ class _cpu extends CPU{
       halt.on(condition: !debug, code: 146);
       return CPUresult.stop;
     }else{
-      return h(Op.parse(ir));
+      var ret = h(Op.parse(ir));
+      halt.on(condition: ret!=null);
+      return ret;
     }
   }
 
   @override
   void reset(){
     ir = new int27.zero();
+    reg = new Registers();
     pc = start;
   }
 

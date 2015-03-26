@@ -9,5 +9,6 @@ part 'mem.dart';
 part 'proc.dart';
 part 'op.dart';
 part 'alu.dart';
+part 'reg.dart';
 
 final fmt = new Logger("trisc");
