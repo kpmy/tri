@@ -18,7 +18,7 @@ void init(){
   Function step;
   step = (){
     if (p.next() != CPU.stop)
-      new Future.delayed(new Duration(milliseconds: 50), step);
+      new Future.delayed(new Duration(milliseconds: 500), step);
   };
   step();
 }

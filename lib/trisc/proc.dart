@@ -26,7 +26,7 @@ class ProcFactory{
   }
 }
 
-typedef int IRhandler(op);
+typedef int IRhandler(Operation op);
 
 class _cpu extends CPU{
   int27 ir;
@@ -46,9 +46,10 @@ class _cpu extends CPU{
   }
 
   IRhandler handler(){
-    return (op){
-
+    var def = (Operation op){
+      
     };
+    return def;
   }
 
   int parse(int27 ir, IRhandler h){
