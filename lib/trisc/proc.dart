@@ -78,9 +78,9 @@ class _cpu extends CPU{
           if(reg.nz != FALSE) jump(adr, op.cond.link); /* >= */
         }else if(nz == NULL && eq == FALSE){
           if(reg.nz != NULL) jump(adr, op.cond.link); /* # */
-        }else if(nz == FALSE && eq == NULL){
+        }else if(nz == FALSE && eq == FALSE){
           if(reg.nz != TRUE) jump(adr, op.cond.link); /* <= */
-        }else halt.on(code: 215);
+        }else halt.on(code: 215, msg: "$nz $eq");
       }
     };
 
@@ -94,11 +94,11 @@ class _cpu extends CPU{
         calc(op, pc + op.offset);
         return CPUresult.ok;
       }else if (op is GetWord){
-        reg[op.a] = new Mapper(mem)[(reg[op.b] + op.offset).toInt()];
+        reg[op.a] = new Mapper(mem)[(reg[op.b] + op.offset).toInt() ~/ 3];
         reg.updateNZ(op.a);
         return CPUresult.ok;
       }else if (op is SetWord){
-        new Mapper(mem)[(reg[op.b] + op.offset).toInt()] = reg[op.a];
+        new Mapper(mem)[(reg[op.b] + op.offset).toInt() ~/ 3] = reg[op.a];
         return CPUresult.ok;
       }else if(op is GetTryte){
         reg[op.a] = long(mem[(reg[op.b] + op.offset).toInt()]);

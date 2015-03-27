@@ -11,17 +11,17 @@ class Module{
 class Flasher{
   static const descSize = 15;
   static const firstJump = 1;
-  
+
   RAM mem;
   int mt;
   int start;
-  
+
   List<Module> ml = new List();
-  
-  flash (String name, {int adr: -1, bool boot: false, bool list: false}) async{
-    
+
+  flash (String name, {int adr: -1, bool boot: false, bool list: true}) async{
+
     Mapper mapper = new Mapper(mem);
-    
+
     /* снизу вверх исправляем адреса */
     var fixD = (int adr, int fixorgD){
       int fadr = adr + fixorgD * 3;
@@ -30,13 +30,13 @@ class Flasher{
         int27 disp = (inst << 11) >> 11;
         int27 mno = (inst << 7) >> 23;
         if(mno == long(0)){
-          int27 _new = ((inst >> 20) << 20) + (long(mt) << 16) + long(ml.length * 3);
+          int27 _new = ((inst >> 20) << 20) + (long(org.MT) << 16) + long(ml.length * 3);
           mapper[fadr ~/ 3] = _new;
         }
         fadr = fadr - disp.toInt() * 3;
       }
     };
-    
+
     var fixP = (int adr, int fixorgP, List<String> imp){
       int fadr = adr + fixorgP * 3;
       while(fadr != adr){
@@ -54,7 +54,7 @@ class Flasher{
         fadr = fadr - disp.toInt()*3;
       }
     };
-    
+
     try{
       var code = await HttpRequest.getString("tc/$name.tc");
       Map tc;
@@ -97,12 +97,12 @@ class Flasher{
          fixorgP = nons.containsKey("fixorgP") ? nons["fixorgP"] : 0;
          List nonits = nons["nons"];
          int i = 0;
-         int c = adr + _var + typ + str; mod.code = c; 
+         int c = adr + _var + typ + str; mod.code = c;
          nonits.forEach((String n){
            mapper[(c ~/ 3) + i] = Nons.parse(n);
            i++;
          });
-         
+
          if(list){
            ml.add(mod);
            mod.size = _var + str + typ + (nonits.length * 3);
@@ -128,7 +128,7 @@ class Flasher{
       return -1;
     }
   }
-  
+
   Flasher(this.mem, this.mt, [int shift = 0]){
     this.start = mt + shift;
   }

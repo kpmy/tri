@@ -38,6 +38,8 @@ class Mapper {
   }
 
   operator []=(int adr, int27 val) {
+    if(adr == 607)
+      fmt.fine("word write [$adr]=$val");
     int a = adr * WORD;
     List<tryte> x = splitInt27(val);
     for (int i = 0; i < WORD; i++) {

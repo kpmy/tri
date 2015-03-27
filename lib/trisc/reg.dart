@@ -56,7 +56,7 @@ class Registers {
     _cache[asm.lsl] = (tryte a, tryte b, int27 c) {
       this[a] = c.toInt() == 0
           ? this[b]
-          : (c.toInt() > 0 ? this[b] << c.toInt() : this[b] >> c.toInt());
+          : (c.toInt() > 0 ? this[b] << c.toInt() : this[b] >> c.toInt().abs());
     };
     _cache[asm.mul] = (tryte a, tryte b, int27 c) {
       this[a] = this[b] * c;
