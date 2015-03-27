@@ -115,7 +115,12 @@ class Trits {
     if (x < 0) ret = ~ret;
     return ret;
   }
-
+  
+  operator []=(int i, Tril x){
+    if (i == 0 || i.abs() > 27) throw new ArgumentError("$i");
+    _trits[i.abs() - 1] = i > 0 ? x : ~x;
+  }
+  
   void _fill(int x, int mx) {
     clear();
     List<int> m = new List(mx);

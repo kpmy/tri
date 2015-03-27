@@ -58,24 +58,56 @@ class _cpu extends CPU{
 
     var jump = (int27 to, bool link){
       if(link)
-        reg[short(reg.length-1)] = to * long(3); /* регистры запоминают адрес в трайтах */
+        reg[short(reg.length-1)] = pc * long(3); /* регистры запоминают адрес в трайтах */
       pc = to; /* сдвиг в словах */
     };
 
     var calc = (BranchOperation op, int27 adr){
-      if(op.cond.jump.True)
+      if(op.cond.jump.True){
         jump(adr, op.cond.link);
+      }else if(op.cond.jump.Null){
+        var nz = op.cond.nz;
+        var eq = op.cond.eq;
+        if(nz == TRUE && eq == NULL){
+          if(reg.nz == TRUE) jump(adr, op.cond.link); /* > */
+        }else if(nz == NULL && eq == NULL){
+          if(reg.nz == NULL) jump(adr, op.cond.link); /* = */
+        }else if(nz == FALSE && eq == NULL){
+          if(reg.nz == FALSE) jump(adr, op.cond.link); /* < */
+        }else if(nz == TRUE && eq == TRUE){
+          if(reg.nz != FALSE) jump(adr, op.cond.link); /* >= */
+        }else if(nz == NULL && eq == FALSE){
+          if(reg.nz != NULL) jump(adr, op.cond.link); /* # */
+        }else if(nz == FALSE && eq == NULL){
+          if(reg.nz != TRUE) jump(adr, op.cond.link); /* <= */
+        }else halt.on(code: 215);
+      }
     };
 
     var def = (Operation op){
-      if(op is Reg)
+      if(op is Reg){
         return rh(op);
-      if(op is BranchReg){
+      }else if(op is BranchReg){
         calc(op, reg[op.c] ~/ long(3));
         return CPUresult.ok;
-      }
-      else
-        halt.on(msg: op.runtimeType);
+      }else if(op is BranchConst){
+        calc(op, pc + op.offset);
+        return CPUresult.ok;
+      }else if (op is GetWord){
+        reg[op.a] = new Mapper(mem)[(reg[op.b] + op.offset).toInt()];
+        reg.updateNZ(op.a);
+        return CPUresult.ok;
+      }else if (op is SetWord){
+        new Mapper(mem)[(reg[op.b] + op.offset).toInt()] = reg[op.a];
+        return CPUresult.ok;
+      }else if(op is GetTryte){
+        reg[op.a] = long(mem[(reg[op.b] + op.offset).toInt()]);
+        reg.updateNZ(op.a);
+        return CPUresult.ok;
+      }else if(op is SetTryte){
+        mem[(reg[op.b] + op.offset).toInt()] = short(reg[op.a]);
+        return CPUresult.ok;
+      }else halt.on(msg: op.runtimeType);
     };
     return def;
   }
@@ -112,7 +144,8 @@ class _cpu extends CPU{
     fmt.fine(new Trits(ir));
 
     CPUresult ret = parse(ir, handler());
-    fmt.fine("step $step: $ret");
+    fmt.fine(reg);
+    fmt.fine("");
     return ret;
   }
 

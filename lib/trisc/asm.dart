@@ -31,3 +31,37 @@ class asm{
   static final tryte nz = new tryte(4);
   static final tryte eq = new tryte(3);
 }
+
+/* предопределенные регистры */
+class org{
+  static final tryte MT = short(23); 
+  static final tryte SB = short(24); 
+  static final tryte SP = short(25); 
+  static final tryte LNK = short(26);
+  static final tryte TMP = short(8);   
+}
+
+class asg{
+
+  static int27 _reg2(tryte op, tryte ra, tryte rb, int27 im){
+    int27 max = (int27.max << 15) >> 15;
+    int27 min = (int27.min << 15) >> 15;
+    if(im > max || im < min){
+      halt.on(code: 126);
+    }else{
+      return (asm.reg2 << 24) + (ra << 20) + (rb << 16) + (op << 12) + ((im << 15) >> 15);
+    }
+  }
+  
+  static int27 brr(tryte rc, tryte cond, int27 data){
+    return (asm.brr << 24) + (cond << 18) + ((data << 13) >> 9) + long(rc);
+  }
+  
+  static int27 imov(tryte ra, int27 im){
+    return _reg2(asm.mov, ra, short(0), im);
+  }
+  
+  static int27 iadd(tryte ra, tryte rb, int27 im){
+     return _reg2(asm.add, ra, rb, im);
+   }
+}

@@ -21,5 +21,6 @@ init() async {
   Host host = new Host();
   Flasher flash = new Flasher(host.mem, mtOrg, 81);
   await flash.flash("bootstrap", adr: bootPC);
+  await flash.flash("Core", boot: true, list: true);
   host.run();
 }

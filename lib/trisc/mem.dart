@@ -16,7 +16,7 @@ class MemFactory {
   static RAM newRAM(int length) {
     return new _stdRam(length);
   }
-  
+
   static MMU newMMU(int neg, int pos){
     return new _stdMmu(neg, pos);
   }
@@ -51,17 +51,17 @@ class Mapper {
 }
 
 class _stdMmu extends MMU{
-  
+
   RAM _n;
   RAM _p;
-  
+
   int get neg => _n.length;
   int get pos => _p.length;
   int get length => _n.length + _p.length;
-  
+
   tryte operator [](int adr){
     if (adr >= 0){
-      halt.on(condition: adr<_p.length);
+      halt.on(condition: adr<_p.length, msg: adr);
       return _p[adr];
     }else{
       halt.on(condition: adr.abs()-1<_n.length);

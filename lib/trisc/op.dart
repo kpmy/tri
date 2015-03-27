@@ -17,7 +17,7 @@ abstract class MemoryOperation extends Operation{
   MemoryOperation(this._ir){
     a = short((_ir << 3) >> 23);
     b = short((_ir << 7) >> 23);
-    offset = (_ir << -11) >> 11;
+    offset = (_ir << 11) >> 11;
   }
 }
 
@@ -27,13 +27,24 @@ class Condition{
   Tril nz;
   Tril eq;
 
-  Condition(tryte c){
+  Condition.parse(tryte c){
     Trits cond = new Trits(c);
     link = cond[asm.lnk.toInt()].True;
     jump = cond[asm.jmp.toInt()];
     nz = cond[asm.nz.toInt()];
     eq = cond[asm.eq.toInt()];
   }
+
+  tryte compile(){
+    Trits cond = new Trits(short(0));
+    cond[asm.lnk.toInt()] = new Tril(link);
+    cond[asm.jmp.toInt()] = jump;
+    cond[asm.nz.toInt()] = nz;
+    cond[asm.eq.toInt()] = eq;
+    return short(cond.toInt27());
+  }
+
+  Condition(this.link, this.jump, this.nz, this.eq);
 }
 
 abstract class BranchOperation extends Operation{
@@ -53,7 +64,7 @@ abstract class BranchOperation extends Operation{
     offset = (_ir << 9) >> 9;
     data = (_ir << 9) >> 13;
     tryte cnd = short((_ir << 3) >> 21);
-    cond = new Condition(cnd);
+    cond = new Condition.parse(cnd);
   }
 }
 

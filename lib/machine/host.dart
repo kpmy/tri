@@ -44,7 +44,7 @@ class Host {
   void run(){
     Function step;
     step = () {
-      if (proc.next() != CPUresult.stop && !stop) new Future.delayed(new Duration(milliseconds: 500), step);
+      if (proc.next() != CPUresult.stop && !stop) new Future.delayed(new Duration(milliseconds: 50), step);
     };
     step();
   }
